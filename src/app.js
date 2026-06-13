@@ -2,6 +2,17 @@ const express = require('express');
 
 const app = express();
 
+app.use("/test", (req, res,next) => {
+    next();
+    res.send("sent!");
+    console.log("checked")
+    
+},
+    (req, res) => {
+        res.send("sent 2!");
+    }
+)
+
 app.get("/user", (req, res) => {
     res.send("user data fetched.")
 })
