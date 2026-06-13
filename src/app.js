@@ -2,14 +2,18 @@ const express = require('express');
 
 const app = express();
 
-app.use((req,res) => {
-    res.send("hello from server");
+app.get("/user", (req, res) => {
+    res.send("user data fetched.")
 })
 
-app.use("/test",(req,res) => {
-    res.send("gettt this")
+app.post("/user", (req, res) => {
+    res.send("post data to database.")
 })
 
-app.listen(3000,()=>{
+app.delete("/user", (req, res) => {
+    res.send("delete data from database.")
+})
+
+app.listen(3000, () => {
     console.log("Listening port 3000");
 });
