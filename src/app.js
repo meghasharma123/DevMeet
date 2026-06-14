@@ -1,9 +1,14 @@
 const express = require('express');
 const { adminAuth, userAuth } = require('./middlewares/AuthenticationCheck');
-require('./config/database');
+const { connectDatabase } = require('./config/database');
 
 const app = express();
 
-app.listen(3000, () => {
-    console.log("Listening port 3000");
-});
+connectDatabase().then(() => {
+    console.log("Connection established.");
+    app.listen(3000, () => {
+        console.log("Listening port 3000");
+    });
+}).catch((err) => {
+    console.log("Unable to connect to database", err);
+})
