@@ -1,28 +1,20 @@
 const express = require('express');
+const { adminAuth, userAuth } = require('../middlewares/AuthenticationCheck');
 
 const app = express();
 
-app.use("/test", (req, res,next) => {
-    next();
-    res.send("sent!");
-    console.log("checked")
-    
-},
-    (req, res) => {
-        res.send("sent 2!");
-    }
-)
+app.use("/admin", adminAuth)
 
-app.get("/user", (req, res) => {
-    res.send("user data fetched.")
+app.get("/admin/getAllUser", (req, res) => {
+    res.send("Fetched all user info!");
 })
 
-app.post("/user", (req, res) => {
-    res.send("post data to database.")
+app.get("/user/login", (req, res) => {
+    res.send("Login");
 })
 
-app.delete("/user", (req, res) => {
-    res.send("delete data from database.")
+app.get("/user", userAuth, (req, res) => {
+    res.send("valid user");
 })
 
 app.listen(3000, () => {
