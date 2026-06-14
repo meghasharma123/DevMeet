@@ -6,7 +6,15 @@ const app = express();
 app.use("/admin", adminAuth)
 
 app.get("/admin/getAllUser", (req, res) => {
-    res.send("Fetched all user info!");
+    // try {
+        throw new Error("xysss")
+    // } catch (error) {
+    //     res.status(500).send("something went wrong");
+    // }
+})
+
+app.use("/",(err,req,res,next) => {
+    res.status(500).send("Wild exit.")
 })
 
 app.get("/user/login", (req, res) => {
