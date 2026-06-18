@@ -13,7 +13,7 @@ app.post("/user", async (req, res) => {
         await user1.save();
         res.send("User saved successfully!");
     } catch (error) {
-        res.status(500).send("Error saving data: ", error.message);
+        res.status(500).send("Error saving data: "+ error);
     }
 })
 
@@ -28,7 +28,7 @@ app.get("/feed", async (req, res) => {
 
 app.get("/user", async (req, res) => {
     try {
-        const emailId = req.body.email;
+        const emailId = req.body.emailId;
 
         const result = await User.find({ email: emailId });
         res.send(result);
