@@ -25,18 +25,24 @@ const userSchema = new mongoose.Schema({
         type: Number
     },
     gender: {
-        type: String
+        type: String,
+        validate(value) {
+            if (!["male", "female", "others"].includes(value)) {
+                throw new Error("Gender is not valid.")
+            }
+        }
     },
     photoUrl: {
         type: String,
-        default:"https://geographyandyou.com/images/user-profile.png"
+        default: "https://geographyandyou.com/images/user-profile.png"
     },
     about: {
         type: String,
-        default:"This is a default discription."
+        default: "This is a default discription."
     },
     skills: {
-        type: [String]
+        type: [String],
+        default:["JS"]
     }
 }, {
     timestamps: true

@@ -10,10 +10,10 @@ app.use(express.json());
 app.post("/user", async (req, res) => {
     const user1 = new User(req.body);
     try {
-        await user1.save();
-        res.send("User saved successfully!");
+        const resVal = await user1.save();
+        res.send("User saved successfully!" + resVal);
     } catch (error) {
-        res.status(500).send("Error saving data: "+ error);
+        res.status(500).send("Error saving data: " + error);
     }
 })
 
@@ -54,11 +54,14 @@ app.patch("/user", async (req, res) => {
         const userId = req.body.id;
         const data = req.body;
 
-        await User.findByIdAndUpdate(userId, data);
+        const resVal = await User.findByIdAndUpdate(userId, data, {
+            runValidators: true,
+            returnDocument: "after"
+        });
 
-        res.send("updated");
+        res.send("updated" + resVal);
     } catch (error) {
-        res.status(500).send("Failed!");
+        res.status(500).send("Failed!" + error);
     }
 })
 
