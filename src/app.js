@@ -1,13 +1,15 @@
 const express = require('express');
-const { adminAuth, userAuth } = require('./middlewares/AuthenticationCheck');
+const { userAuth } = require('./middlewares/AuthenticationCheck');
 const { connectDatabase } = require('./config/database');
 const { User } = require('./models/user')
 const { validateSignUpData } = require('./utils/validation')
 const bcrypt = require('bcrypt');
+const cookieParser = require('cookie-parser')
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.post("/signup", async (req, res) => {
     try {
@@ -32,19 +34,33 @@ app.post("/signup", async (req, res) => {
 app.post("/login", async (req, res) => {
     try {
         const { emailId, password } = req.body;
+
         const user = await User.findOne({ emailId: emailId });
 
         if (!user) {
             throw new Error("User not found");
         }
 
-        const isValid = await bcrypt.compare(password, user.password);
+        const isValid = await user.verifyPassword(password);
 
         if (isValid) {
+            const token = await user.getJWT();
+
+            res.cookie("token", token);
             res.send("User login successfully")
         } else {
             throw new Error("Password incorect")
         }
+    } catch (error) {
+        res.status(400).send("Error: " + error.message);
+    }
+})
+
+app.get("/profile", userAuth, async (req, res) => {
+    try {
+        const user = req.user;
+
+        res.send(user)
     } catch (error) {
         res.status(400).send("Error: " + error.message);
     }
