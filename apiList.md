@@ -13,9 +13,7 @@
 ### connectionsRequestRouter
 
 - POST /request/send/:status/:userid
-
-- POST /request/review/accepted/:requestid
-- POST /request/review/rejected/:requestid
+- POST /request/review/:status/:requestid
 
 ### userRouter
 
