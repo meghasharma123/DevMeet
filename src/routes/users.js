@@ -14,12 +14,9 @@ userRouter.get("/user/requests", userAuth, async (req, res) => {
     const data = await ConnectionRequestModel.find({
       toUserId: loggedInUser._id,
       status: "interested",
-    }).populate("fromUserId", ["firstName", "lastName", "emailId"]);
+    }).populate("fromUserId", USER_SAFE_DATA);
 
-    res.json({
-      message: "Fetched",
-      data: data,
-    });
+    res.json(data);
   } catch (error) {
     res.status(400).send("Error: " + error.message);
   }
@@ -74,11 +71,11 @@ userRouter.get("/user/feed", userAuth, async (req, res) => {
         { _id: { $ne: loggedInUser._id } },
       ],
     })
-      .select("firstName lastName email age skills about photoUrl gender")
+      .select(USER_SAFE_DATA)
       .skip(skip)
       .limit(limit);
 
-    res.json({ data: data });
+    res.json(data);
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
